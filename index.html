@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quiero reparar todo esto.</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root{
+      --petal:#FFD54A;
+      --center:#FFB300;
+      --stem:#6BBF59;
+      --accent:#FDE68A;
+      --font: 'Segoe UI', Roboto, Arial, sans-serif;
+    }
+    html,body{height:100%;margin:0;font-family:var(--font);overflow-x:hidden}
+    body{
+      background: linear-gradient(135deg, #fffbe9 0%, #ffeaa7 50%, #fddc5c 100%);
+      background-attachment: fixed;
+      display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;
+      position:relative;
+    }
+
+    .petal-fall{
+      position:absolute;width:22px;height:22px;background:var(--petal);
+      border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+      opacity:0.8;
+      animation:fall linear infinite;
+      z-index:0;
+      pointer-events:none;
+    }
+    @keyframes fall{
+      0%{transform:translateY(-10vh) rotate(0deg);opacity:1}
+      100%{transform:translateY(110vh) rotate(360deg);opacity:0}
+    }
+
+    .card{
+      width:100%;max-width:960px;background:rgba(255,255,255,0.55);backdrop-filter:blur(10px);
+      border-radius:20px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.12);
+      z-index:1;position:relative;
+    }
+    header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .title{font-size:20px;font-weight:700;color:#5a3d00}
+    .sub{color:#6b4b24;font-size:14px}
+
+    .garden{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap:12px;
+      padding:14px 4px;
+      align-items:start;
+    }
+
+    .flower{
+      --size:140px; 
+      width:100%;
+      max-width:var(--size);
+      aspect-ratio:1/1;
+      height:auto;
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transform-origin:center bottom;
+      box-sizing:border-box;
+      margin-inline:auto;
+    }
+    .stem{position:absolute;bottom:-8px;left:50%;width:6px;height:42%;background:linear-gradient(180deg,var(--stem),#2f8b3e);transform:translateX(-50%);border-radius:6px;z-index:0}
+    .leaf{position:absolute;background:linear-gradient(180deg,#6ec46a,#2f8b3e);width:28px;height:14px;border-radius:20px;z-index:0;opacity:0.95}
+    .leaf.left{left:10%;bottom:28%;transform:rotate(-30deg)}
+    .leaf.right{right:10%;bottom:20%;transform:rotate(30deg)}
+    .petal{position:absolute;width:56%;height:56%;background:var(--petal);border-radius:60% 60% 20% 20%/70% 70% 30% 30%;box-shadow:inset -6px -6px 12px rgba(0,0,0,0.08), 0 6px 12px rgba(0,0,0,0.06);transform-origin:bottom center;transition:transform .3s ease;opacity:0.98}
+    .petal.p1{transform:rotate(0deg)  translateY(-18%)}
+    .petal.p2{transform:rotate(60deg) translateY(-18%)}
+    .petal.p3{transform:rotate(120deg) translateY(-18%)}
+    .petal.p4{transform:rotate(180deg) translateY(-18%)}
+    .petal.p5{transform:rotate(240deg) translateY(-18%)}
+    .petal.p6{transform:rotate(300deg) translateY(-18%)}
+    .center{width:36%;height:36%;background:radial-gradient(circle at 35% 30%,var(--accent),var(--center));border-radius:50%;z-index:2;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.1); transform: translateY(19px);}
+    .center .dots{position:relative;width:72%;height:72%}
+    .center .dots::after{content:'';position:absolute;inset:18% 18% 18% 18%;border-radius:50%;background:rgba(0,0,0,0.06)}
+
+    @keyframes sway{0%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}100%{transform:rotate(-2deg)}}
+    .flower.animate{animation:sway var(--dur,4s) ease-in-out infinite}
+    .flower:hover{filter:brightness(1.06);transform:scale(1.04)}
+
+    .messageBox{margin-top:14px;padding:16px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.65),rgba(255,255,255,0.4));text-align:center;box-shadow:0 6px 20px rgba(0,0,0,0.08)}
+    .messageBox h2{margin:6px 0;font-size:22px;color:#5a3d00}
+    .messageBox p{margin:6px 0;color:#4b3b22;font-size:15px;line-height:1.4}
+
+    footer{margin-top:16px;font-size:13px;color:#5a3d00;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px}
+
+    .btn-heart {
+      background: #e63946;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s ease;
+      display:inline-block;
+    }
+    .btn-heart:hover {transform: scale(1.1);background: #d62828;}
+
+    @media (max-width:520px){
+      .garden{gap:8px}
+      .btn-heart{font-size:16px;padding:10px 16px;margin-top:10px}
+      .flower{--size:120px}
+      .stem{height:36%}
+    }
+  </style>
+  <audio id="bgMusic" autoplay loop muted>
+    <source src="Por eso canto.mp3" type="audio/mpeg">
+  </audio>
+  <script>
+    // Quita el mute en el primer clic
+    document.addEventListener('click', () => {
+      const bg = document.getElementById('bgMusic');
+      if(bg.muted){
+        bg.muted = false;
+        bg.play();
+      }
+    }, { once: true });
+  </script>
+</head>
+<body>
+  <div id="falling"></div>
+
+  <div class="card" role="main">
+    <header>
+      <div>
+        <div class="title">Liliana</div>
+        <div class="sub">Aunque no hablemos, te sigo extrañando.</div>
+      </div>
+      <div class="sub">Fecha: <strong>27 de septiembre.</strong></div>
+    </header>
+
+    <div class="garden" id="garden"></div>
+
+    <div class="messageBox">
+      <h2>Para Liliana</h2>
+      <p>Aunque no estemos juntos, quiero regalarte flores con estas palabras.</p>
+      <p>Quizá ya no hablemos como antes, pero todavía pienso en ti y te extraño.</p>
+      <p>Puede que lo nuestro haya cambiado, pero lo que siento sigue aquí, tan sincero como el primer día. No busco abrumarte, solo recordarte lo especial que eres para mí.</p>
+    </div>
+
+    <footer>
+      <div>Creado con ❤️ y con la esperanza de que pienses en mí</div>
+      <div style="font-style:italic">Un pequeño jardín hecho con recuerdos</div>
+    </footer>
+    <div class="text-center mt-3">
+      <button class="btn-heart" data-bs-toggle="modal" data-bs-target="#mensajeModal">
+        ❤️ Ver mensaje
+      </button>
+    </div>
+  </div>
+  <div class="modal fade" id="mensajeModal" tabindex="-1" aria-labelledby="mensajeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius: 16px;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="mensajeLabel">🌻Liliana</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p>Hola, sé que quizás esto te sorprenda, pero no quería dejar pasar esta oportunidad para decirte algo desde el corazón. Te extraño, más de lo que imaginé que se podía extrañar a alguien. Pienso en ti todos los días, todas mis noches, en los momentos simples que compartíamos, en tu risa, en la calma que me dabas sin darte cuenta. Sé que cometí errores, y no pretendo esconderlo. Estoy aprendiendo de ellos, porque me di cuenta de que alguien como tú merece lo mejor de mí. No busco agobiarte, solo quiero que sepas que aún te tengo en mi mente y en mi corazón. Si el destino lo permite, me encantaría tener una nueva oportunidad para hacerte feliz, desde lo más sincero de mí. Mientras tanto, solo quiero desearte un feliz inicio de primavera 🌼. Que cada día te regale sonrisas, y que nunca olvides lo especial que eres, al menos para mí lo serás siempre.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const garden = document.getElementById('garden');
+    const falling = document.getElementById('falling');
+
+    function makeFlower(size=140, duration=4, tilt=0){
+      const f = document.createElement('div');
+      f.className = 'flower animate';
+      f.style.setProperty('--size', size + 'px');
+      f.style.setProperty('--dur', duration + 's');
+      const ty = (Math.random()*6 - 3).toFixed(2);
+      f.style.transform = `translateY(${ty}px) rotate(${tilt}deg)`;
+
+      const stem = document.createElement('div');stem.className='stem';f.appendChild(stem);
+      const l1 = document.createElement('div');l1.className='leaf left';f.appendChild(l1);
+      const l2 = document.createElement('div');l2.className='leaf right';f.appendChild(l2);
+
+      for(let i=1;i<=6;i++){
+        const p=document.createElement('div');p.className='petal p'+i;f.appendChild(p);
+      }
+      const c=document.createElement('div');c.className='center';
+      const dots=document.createElement('div');dots.className='dots';c.appendChild(dots);
+      f.appendChild(c);
+
+      f.style.animationDelay = (Math.random()*-2) + 's';
+      return f;
+    }
+
+    function populateGarden(base=9){
+      
+      const colsApprox = Math.max(2, Math.round(window.innerWidth / 140)); 
+      const count = Math.min(12, Math.max(4, colsApprox * 2)); 
+      garden.innerHTML='';
+      for(let i=0;i<count;i++){
+        const size = 90 + Math.round(Math.random()*80); 
+        const dur = 3.2 + Math.random()*2.8;
+        const tilt = Math.round(Math.random()*8 -4);
+        const f = makeFlower(size,dur,tilt);
+        garden.appendChild(f);
+      }
+    }
+
+    function createFallingPetals(n=15){
+      
+      falling.innerHTML = '';
+      for(let i=0;i<n;i++){
+        const petal = document.createElement('div');
+        petal.className = 'petal-fall';
+        petal.style.left = Math.random()*100 + 'vw';
+        petal.style.animationDuration = (6+Math.random()*6)+'s';
+        petal.style.animationDelay = (Math.random()*6)+'s';
+        falling.appendChild(petal);
+      }
+    }
+
+ 
+    populateGarden(9);
+    createFallingPetals(20);
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        populateGarden();
+        createFallingPetals(Math.min(30, Math.max(8, Math.round(window.innerWidth/80))));
+      }, 120);
+    });
+  </script>
+</body>
+</html>
+
